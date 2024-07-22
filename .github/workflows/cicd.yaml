@@ -32,11 +32,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
-      - name: Verify files
-        run: |
-          ls -la
-          ls -la manifest-files/
           
       - name: Update tag in manifests-files
         run: |
