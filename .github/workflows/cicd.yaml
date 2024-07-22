@@ -1,0 +1,66 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t wisecow-app .
+          docker tag wisecow-app:latest ${{ secrets.DOCKER_USERNAME }}/wisecow-app:${{github.run_id}}
+          docker push ${{ secrets.DOCKER_USERNAME }}/wisecow-app:${{github.run_id}}
+
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Update tag in manifests-files
+        run: |
+          sed -i "s/replaceImageTag/${{github.run_id}}/g" manifests-files/deployment.yml
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "iamabhijeetbhovar@gmail.com"
+          git config --global user.name "Abhijeet Bhovar"
+          git add manifests-files/deployment.yml
+          git commit -m "Update tag in deployment manifests"
+          git push
+
+###### Deploy Stage can be used but i am using ARGO CD for this demo
+
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up kubectl
+  #       uses: actions-hub/kubectl@master
+  #       with:
+  #         kubectl-version: 'v1.17.0'
+
+  #     - name: Set up Kubeconfig
+  #       run: echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+  #     - name: Apply Kubernetes manifests
+  #       run: kubectl apply -f manifests-files/
