@@ -14,4 +14,4 @@ spec:
       name: https
       port: 443
       targetPort: 4499
-  type: NodePort
+  type: LoadBalancer
