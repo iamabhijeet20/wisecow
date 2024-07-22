@@ -40,7 +40,7 @@ jobs:
           
       - name: Update tag in manifests-files
         run: |
-          sed -i "s/replaceImageTag/${{github.run_id}}/g" manifest-files/deployment.yml
+          sed -i "s/replaceImageTag/${{github.run_id}}/g" manifest-files/deployment.yaml
 
       - name: Commit and push changes
         run: |
