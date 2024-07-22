@@ -41,7 +41,7 @@ jobs:
         run: |
           git config --global user.email "iamabhijeetbhovar@gmail.com"
           git config --global user.name "Abhijeet Bhovar"
-          git add manifests-files/deployment.yaml
+          git add manifest-files/deployment.yaml
           git commit -m "Update tag in deployment manifests"
           git push
 
