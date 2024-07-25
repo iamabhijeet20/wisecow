@@ -32,16 +32,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
+          
       - name: Update tag in manifests-files
         run: |
-          sed -i "s/replaceImageTag/${{github.run_id}}/g" manifests-files/deployment.yml
+          sed -i "s/replaceImageTag/${{github.run_id}}/g" manifest-files/deployment.yaml
 
       - name: Commit and push changes
         run: |
           git config --global user.email "iamabhijeetbhovar@gmail.com"
           git config --global user.name "Abhijeet Bhovar"
-          git add manifests-files/deployment.yml
+          git add manifest-files/deployment.yaml
           git commit -m "Update tag in deployment manifests"
           git push
 

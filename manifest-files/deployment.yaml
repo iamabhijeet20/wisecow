@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: wisecow-app
-        image: echo2000/wisecow-lite:replaceImageTag
+        image: echo2000/wisecow-app:10043143580
         ports:
         - containerPort: 4499
